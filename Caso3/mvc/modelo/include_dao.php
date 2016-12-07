@@ -1,0 +1,49 @@
+<?php
+	//include all DAO files
+	require_once('dao/AreaDAO.class.php');
+ 	
+	require_once('dao/AreaDAO.class.php');
+	require_once('dto/Area.class.php');
+	require_once('dao/AreaPgDAO.class.php');
+	require_once('dao/AuditoriacategoriaDAO.class.php');
+	require_once('dto/Auditoriacategoria.class.php');
+	require_once('dao/AuditoriacategoriaPgDAO.class.php');
+	require_once('dao/AuditoriaingresoDAO.class.php');
+	require_once('dto/Auditoriaingreso.class.php');
+	require_once('dao/AuditoriaingresoPgDAO.class.php');
+	require_once('dao/CasosDAO.class.php');
+	require_once('dto/Caso.class.php');
+	require_once('dao/CasosPgDAO.class.php');
+	require_once('dao/CategoriapreguntaDAO.class.php');
+	require_once('dto/Categoriapregunta.class.php');
+	require_once('dao/CategoriapreguntaPgDAO.class.php');
+	require_once('dao/EstadosDAO.class.php');
+	require_once('dto/Estado.class.php');
+	require_once('dao/EstadosPgDAO.class.php');
+	require_once('dao/PermisosDAO.class.php');
+	require_once('dto/Permiso.class.php');
+	require_once('dao/PermisosPgDAO.class.php');
+	require_once('dao/PersonasDAO.class.php');
+	require_once('dto/Persona.class.php');
+	require_once('dao/PersonasPgDAO.class.php');
+	require_once('dao/PersonaspreguntasDAO.class.php');
+	require_once('dto/Personaspregunta.class.php');
+	require_once('dao/PersonaspreguntasPgDAO.class.php');
+	require_once('dao/PreguntasrespuestasDAO.class.php');
+	require_once('dto/Preguntasrespuesta.class.php');
+	require_once('dao/PreguntasrespuestasPgDAO.class.php');
+	require_once('dao/PreguntastagsDAO.class.php');
+	require_once('dto/Preguntastag.class.php');
+	require_once('dao/PreguntastagsPgDAO.class.php');
+	require_once('dao/RolesDAO.class.php');
+	require_once('dto/Role.class.php');
+	require_once('dao/RolesPgDAO.class.php');
+	require_once('dao/RolespermisosDAO.class.php');
+	require_once('dto/Rolespermiso.class.php');
+	require_once('dao/RolespermisosPgDAO.class.php');
+	require_once('dao/TagsDAO.class.php');
+	require_once('dto/Tag.class.php');
+	require_once('dao/TagsPgDAO.class.php');
+        require_once ('DbConnection.php');
+
+?>

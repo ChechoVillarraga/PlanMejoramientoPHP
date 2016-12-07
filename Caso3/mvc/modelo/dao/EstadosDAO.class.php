@@ -1,0 +1,65 @@
+<?php
+/**
+ * Intreface DAO
+ *
+ * @author: http://phpdao.com
+ * @date: 2016-12-06 20:53
+ */
+interface EstadosDAO{
+
+	/**
+	 * Get Domain object by primry key
+	 *
+	 * @param String $id primary key
+	 * @Return Estados 
+	 */
+	public function load($id);
+
+	/**
+	 * Get all records from table
+	 */
+	public function queryAll();
+	
+	/**
+	 * Get all records from table ordered by field
+	 * @Param $orderColumn column name
+	 */
+	public function queryAllOrderBy($orderColumn);
+	
+	/**
+ 	 * Delete record from table
+ 	 * @param estado primary key
+ 	 */
+	public function delete($idEstados);
+	
+	/**
+ 	 * Insert record to table
+ 	 *
+ 	 * @param Estados estado
+ 	 */
+	public function insert($estado);
+	
+	/**
+ 	 * Update record in table
+ 	 *
+ 	 * @param Estados estado
+ 	 */
+	public function update($estado);	
+
+	/**
+	 * Delete all rows
+	 */
+	public function clean();
+
+	public function queryByEstado($value);
+
+	public function queryByDescripcionEstado($value);
+
+
+	public function deleteByEstado($value);
+
+	public function deleteByDescripcionEstado($value);
+
+
+}
+?>
