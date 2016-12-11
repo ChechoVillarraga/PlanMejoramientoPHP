@@ -1,42 +1,41 @@
 <?php
-	/**
-	 * Object represents table 'tags'
-	 *
-     	 * @author: http://phpdao.com
-     	 * @date: 2016-12-06 20:53	 
-	 */
-	class Tag{
-		
-		private $idTags;
 
-		private $tags;
+/**
+ * Object represents table 'tags'
+ *
+ * @author: http://phpdao.com
+ * @date: 2016-12-06 20:53	 
+ */
+class Tag {
 
-		private $descripcionTags;
+    private $idtags;
+    private $tags;
+    private $descripciontags;
 
-		function getIdTags() {
-                    return $this->idTags;
-                }
+    function getIdTags() {
+        return $this->idtags;
+    }
 
-                function getTags() {
-                    return $this->tags;
-                }
+    function getTags() {
+        return $this->tags;
+    }
 
-                function getDescripcionTags() {
-                    return $this->descripcionTags;
-                }
+    function getDescripcionTags() {
+        return $this->descripciontags;
+    }
 
-                function setIdTags($idTags) {
-                    $this->idTags = $idTags;
-                }
+    function setIdTags($idTags) {
+        $this->idtags = $idTags;
+    }
 
-                function setTags($tags) {
-                    $this->tags = $tags;
-                }
+    function setTags($tags) {
+        $this->tags = $tags;
+    }
 
-                function setDescripcionTags($descripcionTags) {
-                    $this->descripcionTags = $descripcionTags;
-                }
+    function setDescripcionTags($descripcionTags) {
+        $this->descripciontags = $descripcionTags;
+    }
 
+}
 
-	}
 ?>

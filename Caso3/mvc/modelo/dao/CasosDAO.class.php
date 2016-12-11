@@ -7,6 +7,8 @@
  */
 interface CasosDAO{
 
+     public function ultimoId() ;
+         public function queryFechaCreacion($id) ;
 	/**
 	 * Get Domain object by primry key
 	 *
@@ -37,7 +39,7 @@ interface CasosDAO{
  	 *
  	 * @param Casos caso
  	 */
-	public function insert($caso);
+	public function insert();
 	
 	/**
  	 * Update record in table

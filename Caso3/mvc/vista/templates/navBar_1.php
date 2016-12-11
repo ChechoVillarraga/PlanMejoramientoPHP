@@ -6,7 +6,6 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <?php
-//require_once '../controlador/ControllerLogin.php';
 ?>
 <html>
     <head>
@@ -35,23 +34,57 @@ and open the template in the editor.
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li><a href="../crear/crearCategoria.php">Servicios</a></li>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>¿ Preguntas ?</b> <span class="caret"></span></a>
                                 <ul id="login-dp" class="dropdown-menu">
-                                    <li>
-                                    <li><a href="../crear/crearCategoria.php">Registrar Pregunta</a></li>
-                                    <li><a href="../crear/crearCategoria.php">Consultar Respuestas</a></li>
+                                    <?php
+                                    if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 3) {
+                                    echo'<li><a href="../crear/enviarPregunta.php">Registrar Pregunta</a></li>';
+                                    }
+                                    ?>
+                                    <li><a href="../consultar/consultarPreguntas.php">Consultar Respuestas</a></li>
+                                    <?php
+                                    if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
+                                        echo '<li><a href="../consultar/consultarTags.php">Consultar Tags</a></li>';
+                                        echo '<li><a href="../crear/crearTags.php">Registrar Tag</a></li>';
+                                    }
+                                    ?>
                                 </ul>
                             </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>¿ Categorias ?</b> <span class="caret"></span></a>
+                                <ul id="login-dp" class="dropdown-menu">
+                                    <?php
+                                    if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
+                                        echo '<li><a href="../crear/crearCategoria.php">Registrar nueva Categoria</a></li>';
+                                    }
+                                    ?>
+                                    <li><a href="../consultar/consultarCategorias.php">Consultar Categorias</a></li>
+                                </ul>
+                            </li>
+                                    <?php
+                                    if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
+                            echo '<li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>¿ Empleados ?</b> <span class="caret"></span></a>
+                                <ul id="login-dp" class="dropdown-menu">
+                                        <li><a href="../crear/crearEmpleado.php">Registrar nuevo Empleado</a></li>
+                                    <li><a href="../consultar/consultarEmpleados.php">Consultar Empleados</a></li>
+                                </ul>
+                            </li>';
+                                    }
+                                    ?>
                         </ul>
-
-                    </ul>
+                        <?php
+                        if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
+                            echo '<li><a href="../pdf/PdfFinal.php">Generar Reporte Pdf</a></li>';
+                        }
+                        ?>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="../../controlador/LogoutController.php">Cerrar Sesión</a></li>
                     </ul>
+                    
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>

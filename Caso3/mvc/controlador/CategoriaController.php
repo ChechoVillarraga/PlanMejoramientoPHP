@@ -2,8 +2,7 @@
 
 require_once '../../modelo/include_dao.php';
 $c = array();
-$objCategoria = new CategoriapreguntaPgDAO;
-$objArea = new AreaPgDAO();
+$objCategoria = new CategoriapreguntaPgDAO();
 
 $c = $objCategoria->queryAllAndAreas();
 

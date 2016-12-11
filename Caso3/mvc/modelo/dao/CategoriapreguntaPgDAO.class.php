@@ -27,6 +27,7 @@ class CategoriapreguntaPgDAO implements CategoriapreguntaDAO {
         return $this->getRow($sqlQuery);
     }
 
+    
     /**
      * Get all records from table
      */
@@ -61,8 +62,8 @@ class CategoriapreguntaPgDAO implements CategoriapreguntaDAO {
     }
 
     public function queryAllAndAreas() {
-        $allCatego = array();
-        $sql = 'select c.idcategoriapregunta,c.categoria,c.descripcioncategoria,a.area from categoriapregunta c inner join area a on c.area_idarea=a.idarea';
+        $arrayExit = array();
+        $sql = 'select c.idcategoriapregunta,c.categoria,c.descripcioncategoria,a.area from categoriapregunta c inner join area a on c.area_idarea=a.idarea where c.area_idarea='.$_SESSION['area_idarea'];
         try {
             $query = $this->conexion->prepare($sql);
             if ($query->execute()) {
@@ -73,7 +74,7 @@ class CategoriapreguntaPgDAO implements CategoriapreguntaDAO {
         } catch (PDOException $e) {
             $this->outputMessage = "error in the connection : " . $e->getMessage();
         }
-            return $arrayExit;
+        return $arrayExit;
     }
     
     /**

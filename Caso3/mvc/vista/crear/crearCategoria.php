@@ -2,8 +2,9 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-if (!empty($_SESSION['idPersonas'])) {
-    $title = 'Crear Categoria!';
+
+if ($_SESSION['roles_idroles']==1||$_SESSION['roles_idroles']==2||$_SESSION['roles_idroles']==3) {
+    $title = 'Bienvenido!';
 
     include_once '../templates/navBar_1.php';
     ?>

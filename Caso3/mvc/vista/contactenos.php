@@ -1,5 +1,6 @@
 <?php
-$title = 'Bienvenido!';
+$title = 'Contactenos!';
+include_once '../controlador/EmailerController.php';
 include_once './templates/navBar.php';
 ?>
 <STYLE>
@@ -19,7 +20,7 @@ include_once './templates/navBar.php';
         <form name="NOmbre" 
               method="POST" 
               enctype="multipart/form-data"
-              class=""
+              action= "<?php echo $_SERVER["PHP_SELF"] ?>"
               >
             <DIV class="col-lg-6 col-md-6 col-sm-6 col-xs-6 contenedores text-right"> 
                 Nombres completos: 
@@ -43,11 +44,12 @@ include_once './templates/navBar.php';
                 Mensaje:
             </div>
             <DIV class="col-lg-6 col-md-6 col-sm-6 col-xs-6 contenedores"> 
-                <textarea value="message" rows="4" cols="20">
+                <textarea value="message" rows="4" cols="20" name="message">
                 </textarea>
             </div>
             <DIV class="col-lg-6 col-md-6 col-sm-6 col-xs-6 contenedores text-right"> 
-            <input type="submit" value="Enviar" class="btn-primary"/>
+                <input type="hidden" name="phpmailler"/>
+                <input type="submit" value="Enviar" class="btn-primary" name="phpmailler"/>
             </div>
             <DIV class="col-lg-6 col-md-6 col-sm-6 col-xs-6 contenedores"> 
             <input type="reset" value="Limpiar" class="btn-warning"/>

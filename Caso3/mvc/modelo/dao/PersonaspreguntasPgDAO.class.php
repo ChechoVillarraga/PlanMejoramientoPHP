@@ -1,197 +1,292 @@
 <?php
+
+if (!session_id()) {
+    session_start();
+}
+
 /**
  * Class that operate on table 'personaspreguntas'. Database Mysql.
  *
  * @author: http://phpdao.com
  * @date: 2016-12-06 20:53
  */
-class PersonaspreguntasPgDAO implements PersonaspreguntasDAO{
+class PersonaspreguntasPgDAO implements PersonaspreguntasDAO {
 
-	/**
-	 * Get Domain object by primry key
-	 *
-	 * @param String $id primary key
-	 * @return PersonaspreguntasMySql 
-	 */
-	public function load($personasIdPersonas, $casosIdCasos, $preguntasRespuestasIdPreguntas){
-		$sql = 'SELECT * FROM personaspreguntas WHERE Personas_idPersonas = ?  AND Casos_idCasos = ?  AND PreguntasRespuestas_idPreguntas = ? ';
-		$sqlQuery = new SqlQuery($sql);
-		$sqlQuery->setNumber($personasIdPersonas);
-		$sqlQuery->setNumber($casosIdCasos);
-		$sqlQuery->setNumber($preguntasRespuestasIdPreguntas);
+    private $conexion = null;
 
-		return $this->getRow($sqlQuery);
-	}
+    function __construct() {
+        $this->conexion = DbConnection::singletonConexion();
+    }
 
-	/**
-	 * Get all records from table
-	 */
-	public function queryAll(){
-		$sql = 'SELECT * FROM personaspreguntas';
-		$sqlQuery = new SqlQuery($sql);
-		return $this->getList($sqlQuery);
-	}
-	
-	/**
-	 * Get all records from table ordered by field
-	 *
-	 * @param $orderColumn column name
-	 */
-	public function queryAllOrderBy($orderColumn){
-		$sql = 'SELECT * FROM personaspreguntas ORDER BY '.$orderColumn;
-		$sqlQuery = new SqlQuery($sql);
-		return $this->getList($sqlQuery);
-	}
-	
-	/**
- 	 * Delete record from table
- 	 * @param personaspregunta primary key
- 	 */
-	public function delete($personasIdPersonas, $casosIdCasos, $preguntasRespuestasIdPreguntas){
-		$sql = 'DELETE FROM personaspreguntas WHERE Personas_idPersonas = ?  AND Casos_idCasos = ?  AND PreguntasRespuestas_idPreguntas = ? ';
-		$sqlQuery = new SqlQuery($sql);
-		$sqlQuery->setNumber($personasIdPersonas);
-		$sqlQuery->setNumber($casosIdCasos);
-		$sqlQuery->setNumber($preguntasRespuestasIdPreguntas);
+    public function queryPreguntasPorCaso($caso) {
+        $allPreguntas = array();
+        $sql = 'SELECT preguntasrespuestas_idpreguntas,fechaenvio,casos_idcasos,preguntasrespuestas_idpreguntas '
+                . 'FROM personaspreguntas '
+                . 'WHERE casos_idcasos=' . $caso;
+        try {
+            $query = $this->conexion->prepare($sql);
+            if ($query->execute()) {
+                $arrayExit = $query->fetchALL(PDO::FETCH_ASSOC);
+                $allPreguntas = $this->traerOtrosCampos($arrayExit);
+            } else {
+                $this->outputMessage = 'Error in the sql expression';
+            }
+        } catch (PDOException $e) {
+            $this->outputMessage = "error in the connection : " . $e->getMessage();
+        }
+        return $allPreguntas;
+    }
 
-		return $this->executeUpdate($sqlQuery);
-	}
-	
-	/**
- 	 * Insert record to table
- 	 *
- 	 * @param PersonaspreguntasMySql personaspregunta
- 	 */
-	public function insert($personaspregunta){
-		$sql = 'INSERT INTO personaspreguntas (fechaEnvio, Personas_idPersonas, Casos_idCasos, PreguntasRespuestas_idPreguntas) VALUES (?, ?, ?, ?)';
-		$sqlQuery = new SqlQuery($sql);
-		
-		$sqlQuery->set($personaspregunta->fechaEnvio);
+    public function traerOtrosCampos($arrayExit) {
+        $objCasos = new CasosPgDAO();
+        $objPregunta = new PreguntasrespuestasPgDAO();
+        for ($i = 0; $i < count($arrayExit); $i++) {
+            $arrayRetorno = $objCasos->queryFechaCreacion($arrayExit[$i]['casos_idcasos']);
+            $arrayExit[$i][] = $arrayRetorno[0]['fechacreacion'];
+            $arrayRetorno = $objPregunta->queryPreguntaCategoria($arrayExit[$i]['preguntasrespuestas_idpreguntas']);
+            $arrayExit[$i]['preguntasrespuestas_idpreguntas'] = $arrayRetorno[0]['categoria'];
+            $arrayExit[$i][] = $arrayRetorno[0]['estado'];
+            $arrayExit[$i][] = $arrayRetorno[0]['preguntas'];
+            $arrayExit[$i][] = $arrayRetorno[0]['idcategoriapregunta'];
+        }
+        return $arrayExit;
+    }
 
-		
-		$sqlQuery->setNumber($personaspregunta->personasIdPersonas);
+    public function load($personasIdPersonas, $casosIdCasos, $preguntasRespuestasIdPreguntas) {
+        $sql = 'SELECT * FROM personaspreguntas WHERE Personas_idPersonas = ?  AND Casos_idCasos = ?  AND PreguntasRespuestas_idPreguntas = ? ';
+        $sqlQuery = new SqlQuery($sql);
+        $sqlQuery->setNumber($personasIdPersonas);
+        $sqlQuery->setNumber($casosIdCasos);
+        $sqlQuery->setNumber($preguntasRespuestasIdPreguntas);
 
-		$sqlQuery->setNumber($personaspregunta->casosIdCasos);
+        return $this->getRow($sqlQuery);
+    }
 
-		$sqlQuery->setNumber($personaspregunta->preguntasRespuestasIdPreguntas);
+    /**
+     * Get all records from table
+     */
+    public function queryAll() {
+        $sql = 'SELECT * FROM personaspreguntas';
+        $sqlQuery = new SqlQuery($sql);
+        return $this->getList($sqlQuery);
+    }
 
-		$this->executeInsert($sqlQuery);	
-		//$personaspregunta->id = $id;
-		//return $id;
-	}
-	
-	/**
- 	 * Update record in table
- 	 *
- 	 * @param PersonaspreguntasMySql personaspregunta
- 	 */
-	public function update($personaspregunta){
-		$sql = 'UPDATE personaspreguntas SET fechaEnvio = ? WHERE Personas_idPersonas = ?  AND Casos_idCasos = ?  AND PreguntasRespuestas_idPreguntas = ? ';
-		$sqlQuery = new SqlQuery($sql);
-		
-		$sqlQuery->set($personaspregunta->fechaEnvio);
+    public function queryCasoMinimo() {
+        $allPreguntas = array();
+        $sql = 'SELECT casos_idcasos FROM personaspregunta WHERE personas_idpersonas=' . $_SESSION['idPersonas'] . ' group by casos_idcasos';
+        try {
+            $query = $this->conexion->prepare($sql);
+            if ($query->execute()) {
+                $arrayExit = $query->fetchALL(PDO::FETCH_ASSOC);
+            } else {
+                $this->outputMessage = 'Error in the sql expression';
+            }
+        } catch (PDOException $e) {
+            $this->outputMessage = "error in the connection : " . $e->getMessage();
+        }
+        return $arrayExit;
+    }
 
-		
-		$sqlQuery->setNumber($personaspregunta->personasIdPersonas);
+    public function queryPreguntaMinimo() {
+        $allPreguntas = array();
+        $sql = 'SELECT casos_idcasos FROM personaspregunta WHERE personas_idpersonas=' . $_SESSION['idPersonas'] . ' group by casos_idcasos';
+        try {
+            $query = $this->conexion->prepare($sql);
+            if ($query->execute()) {
+                $arrayExit = $query->fetchALL(PDO::FETCH_ASSOC);
+                $allPreguntas = $this->traerOtrosCampos($arrayExit);
+            } else {
+                $this->outputMessage = 'Error in the sql expression';
+            }
+        } catch (PDOException $e) {
+            $this->outputMessage = "error in the connection : " . $e->getMessage();
+        }
+        return $allPreguntas;
+    }
 
-		$sqlQuery->setNumber($personaspregunta->casosIdCasos);
+    public function queryPreguntas() {
+        $allPreguntas = array();
+        $sql = 'SELECT MIN(preguntasrespuestas_idpreguntas),fechaenvio,casos_idcasos,preguntasrespuestas_idpreguntas,cp.area_idarea FROM personaspreguntas pp inner join preguntasrespuestas pr on pr.idpreguntas = pp.preguntasrespuestas_idpreguntas inner join categoriapregunta cp on cp.idcategoriapregunta=pr.categoriapregunta_idcategoriapregunta WHERE cp.area_idarea=' . $_SESSION['area_idarea'] . ' group by casos_idcasos,fechaenvio,personas_idpersonas,preguntasrespuestas_idpreguntas,cp.area_idarea';
+        try {
+            $query = $this->conexion->prepare($sql);
+            if ($query->execute()) {
+                $arrayExit = $query->fetchALL(PDO::FETCH_ASSOC);
+                $allPreguntas = $this->traerOtrosCampos($arrayExit);
+            } else {
+                $this->outputMessage = 'Error in the sql expression';
+            }
+        } catch (PDOException $e) {
+            $this->outputMessage = "error in the connection : " . $e->getMessage();
+        }
+        return $allPreguntas;
+    }
 
-		$sqlQuery->setNumber($personaspregunta->preguntasRespuestasIdPreguntas);
+    /**
+     * Get all records from table ordered by field
+     *
+     * @param $orderColumn column name
+     */
+    public function queryAllOrderBy($orderColumn) {
+        $sql = 'SELECT * FROM personaspreguntas ORDER BY ' . $orderColumn;
+        $sqlQuery = new SqlQuery($sql);
+        return $this->getList($sqlQuery);
+    }
 
-		return $this->executeUpdate($sqlQuery);
-	}
+    /**
+     * Delete record from table
+     * @param personaspregunta primary key
+     */
+    public function delete($personasIdPersonas, $casosIdCasos, $preguntasRespuestasIdPreguntas) {
+        $sql = 'DELETE FROM personaspreguntas WHERE Personas_idPersonas = ?  AND Casos_idCasos = ?  AND PreguntasRespuestas_idPreguntas = ? ';
+        $sqlQuery = new SqlQuery($sql);
+        $sqlQuery->setNumber($personasIdPersonas);
+        $sqlQuery->setNumber($casosIdCasos);
+        $sqlQuery->setNumber($preguntasRespuestasIdPreguntas);
 
-	/**
- 	 * Delete all rows
- 	 */
-	public function clean(){
-		$sql = 'DELETE FROM personaspreguntas';
-		$sqlQuery = new SqlQuery($sql);
-		return $this->executeUpdate($sqlQuery);
-	}
+        return $this->executeUpdate($sqlQuery);
+    }
 
-	public function queryByFechaEnvio($value){
-		$sql = 'SELECT * FROM personaspreguntas WHERE fechaEnvio = ?';
-		$sqlQuery = new SqlQuery($sql);
-		$sqlQuery->set($value);
-		return $this->getList($sqlQuery);
-	}
+    /**
+     * Insert record to table
+     *
+     * @param PersonaspreguntasMySql personaspregunta
+     */
+    public function insert($idCasos, $idPregun) {
+        $respuesta = null;
+        $idpersonas = null;
+        $sql = 'INSERT INTO personaspreguntas (fechaEnvio, Personas_idPersonas, Casos_idCasos, PreguntasRespuestas_idPreguntas) VALUES (?, ?, ?, ?)';
+        try {
+            $ahora = date("Y-m-d");
+            $idC = $idCasos[0]['max'];
+            $idPre = $idPregun[0]['max'];
+            $per = $_SESSION['idPersonas'];
+            $query = $this->conexion->prepare($sql);
+            $query->bindParam(1, $ahora);
+            $query->bindParam(2, $per);
+            $query->bindParam(3, $idC);
+            $query->bindParam(4, $idPre);
+
+            if ($query->execute()) {
+                $respuesta = 1;
+            } else {
+                $respuesta = 0;
+            }
+        } catch (PDOException $e) {
+            $this->outputMessage = 'error en conexion' . $e->getMessage();
+        }
+        return $respuesta;
+    }
+
+    /**
+     * Update record in table
+     *
+     * @param PersonaspreguntasMySql personaspregunta
+     */
+    public function update($personaspregunta) {
+        $sql = 'UPDATE personaspreguntas SET fechaEnvio = ? WHERE Personas_idPersonas = ?  AND Casos_idCasos = ?  AND PreguntasRespuestas_idPreguntas = ? ';
+        $sqlQuery = new SqlQuery($sql);
+
+        $sqlQuery->set($personaspregunta->fechaEnvio);
 
 
-	public function deleteByFechaEnvio($value){
-		$sql = 'DELETE FROM personaspreguntas WHERE fechaEnvio = ?';
-		$sqlQuery = new SqlQuery($sql);
-		$sqlQuery->set($value);
-		return $this->executeUpdate($sqlQuery);
-	}
+        $sqlQuery->setNumber($personaspregunta->personasIdPersonas);
 
+        $sqlQuery->setNumber($personaspregunta->casosIdCasos);
 
-	
-	/**
-	 * Read row
-	 *
-	 * @return PersonaspreguntasMySql 
-	 */
-	protected function readRow($row){
-		$personaspregunta = new Personaspregunta();
-		
-		$personaspregunta->personasIdPersonas = $row['Personas_idPersonas'];
-		$personaspregunta->casosIdCasos = $row['Casos_idCasos'];
-		$personaspregunta->preguntasRespuestasIdPreguntas = $row['PreguntasRespuestas_idPreguntas'];
-		$personaspregunta->fechaEnvio = $row['fechaEnvio'];
+        $sqlQuery->setNumber($personaspregunta->preguntasRespuestasIdPreguntas);
 
-		return $personaspregunta;
-	}
-	
-	protected function getList($sqlQuery){
-		$tab = QueryExecutor::execute($sqlQuery);
-		$ret = array();
-		for($i=0;$i<count($tab);$i++){
-			$ret[$i] = $this->readRow($tab[$i]);
-		}
-		return $ret;
-	}
-	
-	/**
-	 * Get row
-	 *
-	 * @return PersonaspreguntasMySql 
-	 */
-	protected function getRow($sqlQuery){
-		$tab = QueryExecutor::execute($sqlQuery);
-		if(count($tab)==0){
-			return null;
-		}
-		return $this->readRow($tab[0]);		
-	}
-	
-	/**
-	 * Execute sql query
-	 */
-	protected function execute($sqlQuery){
-		return QueryExecutor::execute($sqlQuery);
-	}
-	
-		
-	/**
-	 * Execute sql query
-	 */
-	protected function executeUpdate($sqlQuery){
-		return QueryExecutor::executeUpdate($sqlQuery);
-	}
+        return $this->executeUpdate($sqlQuery);
+    }
 
-	/**
-	 * Query for one row and one column
-	 */
-	protected function querySingleResult($sqlQuery){
-		return QueryExecutor::queryForString($sqlQuery);
-	}
+    /**
+     * Delete all rows
+     */
+    public function clean() {
+        $sql = 'DELETE FROM personaspreguntas';
+        $sqlQuery = new SqlQuery($sql);
+        return $this->executeUpdate($sqlQuery);
+    }
 
-	/**
-	 * Insert row to table
-	 */
-	protected function executeInsert($sqlQuery){
-		return QueryExecutor::executeInsert($sqlQuery);
-	}
+    public function queryByFechaEnvio($value) {
+        $sql = 'SELECT * FROM personaspreguntas WHERE fechaEnvio = ?';
+        $sqlQuery = new SqlQuery($sql);
+        $sqlQuery->set($value);
+        return $this->getList($sqlQuery);
+    }
+
+    public function deleteByFechaEnvio($value) {
+        $sql = 'DELETE FROM personaspreguntas WHERE fechaEnvio = ?';
+        $sqlQuery = new SqlQuery($sql);
+        $sqlQuery->set($value);
+        return $this->executeUpdate($sqlQuery);
+    }
+
+    /**
+     * Read row
+     *
+     * @return PersonaspreguntasMySql 
+     */
+    protected function readRow($row) {
+        $personaspregunta = new Personaspregunta();
+
+        $personaspregunta->personasIdPersonas = $row['Personas_idPersonas'];
+        $personaspregunta->casosIdCasos = $row['Casos_idCasos'];
+        $personaspregunta->preguntasRespuestasIdPreguntas = $row['PreguntasRespuestas_idPreguntas'];
+        $personaspregunta->fechaEnvio = $row['fechaEnvio'];
+
+        return $personaspregunta;
+    }
+
+    protected function getList($sqlQuery) {
+        $tab = QueryExecutor::execute($sqlQuery);
+        $ret = array();
+        for ($i = 0; $i < count($tab); $i++) {
+            $ret[$i] = $this->readRow($tab[$i]);
+        }
+        return $ret;
+    }
+
+    /**
+     * Get row
+     *
+     * @return PersonaspreguntasMySql 
+     */
+    protected function getRow($sqlQuery) {
+        $tab = QueryExecutor::execute($sqlQuery);
+        if (count($tab) == 0) {
+            return null;
+        }
+        return $this->readRow($tab[0]);
+    }
+
+    /**
+     * Execute sql query
+     */
+    protected function execute($sqlQuery) {
+        return QueryExecutor::execute($sqlQuery);
+    }
+
+    /**
+     * Execute sql query
+     */
+    protected function executeUpdate($sqlQuery) {
+        return QueryExecutor::executeUpdate($sqlQuery);
+    }
+
+    /**
+     * Query for one row and one column
+     */
+    protected function querySingleResult($sqlQuery) {
+        return QueryExecutor::queryForString($sqlQuery);
+    }
+
+    /**
+     * Insert row to table
+     */
+    protected function executeInsert($sqlQuery) {
+        return QueryExecutor::executeInsert($sqlQuery);
+    }
+
 }
+
 ?>

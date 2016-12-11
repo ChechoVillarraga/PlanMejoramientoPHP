@@ -1,61 +1,65 @@
 <?php
+
 /**
  * Intreface DAO
  *
  * @author: http://phpdao.com
  * @date: 2016-12-06 20:53
  */
-interface PersonaspreguntasDAO{
+interface PersonaspreguntasDAO {
 
-	/**
-	 * Get Domain object by primry key
-	 *
-	 * @param String $id primary key
-	 * @Return Personaspreguntas 
-	 */
-	public function load($personasIdPersonas, $casosIdCasos, $preguntasRespuestasIdPreguntas);
+    public function queryPreguntasPorCaso($caso);
 
-	/**
-	 * Get all records from table
-	 */
-	public function queryAll();
-	
-	/**
-	 * Get all records from table ordered by field
-	 * @Param $orderColumn column name
-	 */
-	public function queryAllOrderBy($orderColumn);
-	
-	/**
- 	 * Delete record from table
- 	 * @param personaspregunta primary key
- 	 */
-	public function delete($personasIdPersonas, $casosIdCasos, $preguntasRespuestasIdPreguntas);
-	
-	/**
- 	 * Insert record to table
- 	 *
- 	 * @param Personaspreguntas personaspregunta
- 	 */
-	public function insert($personaspregunta);
-	
-	/**
- 	 * Update record in table
- 	 *
- 	 * @param Personaspreguntas personaspregunta
- 	 */
-	public function update($personaspregunta);	
+    public function traerOtrosCampos($arrayExit);
 
-	/**
-	 * Delete all rows
-	 */
-	public function clean();
+    public function queryCasoMinimo();
 
-	public function queryByFechaEnvio($value);
+    public function queryPreguntaMinimo();
 
+    public function queryPreguntas();
 
-	public function deleteByFechaEnvio($value);
+    public function insert($hey, $id);
 
+    /**
+     * Get Domain object by primry key
+     *
+     * @param String $id primary key
+     * @Return Personaspreguntas 
+     */
+    public function load($personasIdPersonas, $casosIdCasos, $preguntasRespuestasIdPreguntas);
 
+    /**
+     * Get all records from table
+     */
+    public function queryAll();
+
+    /**
+     * Get all records from table ordered by field
+     * @Param $orderColumn column name
+     */
+    public function queryAllOrderBy($orderColumn);
+
+    /**
+     * Delete record from table
+     * @param personaspregunta primary key
+     */
+    public function delete($personasIdPersonas, $casosIdCasos, $preguntasRespuestasIdPreguntas);
+
+    /**
+     * Update record in table
+     *
+     * @param Personaspreguntas personaspregunta
+     */
+    public function update($personaspregunta);
+
+    /**
+     * Delete all rows
+     */
+    public function clean();
+
+    public function queryByFechaEnvio($value);
+
+    public function deleteByFechaEnvio($value);
 }
+
 ?>

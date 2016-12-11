@@ -37,7 +37,7 @@ interface PersonasDAO{
  	 *
  	 * @param Personas persona
  	 */
-	public function insert($persona);
+	public function insert(Persona $persona);
 	
 	/**
  	 * Update record in table
