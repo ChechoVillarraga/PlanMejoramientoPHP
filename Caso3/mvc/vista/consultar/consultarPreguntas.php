@@ -20,8 +20,8 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 3 || $_SESS
     <div class="container">
         <?php
         if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 3) {
-        echo '<a href="../crear/enviarPregunta.php" align="center" class="btn btn-primary">¿Deseas enviar una pregunta?!</a>';
-         }
+            echo '<a href="../crear/enviarPregunta.php" align="center" class="btn btn-primary">¿Deseas enviar una pregunta?!</a>';
+        }
         ?>
         <div class="row">
             <div class="panel panel-primary filterable">
@@ -32,9 +32,27 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 3 || $_SESS
                     </div>
                 </div>
 
-                        <?php
-                        require_once '../../controlador/PreguntasController.php';
-                        ?>
+                <form action='' method='post'>
+                    <table class='table'>
+                        <thead>
+                            <tr class='filters'>
+                                <th><input type='text' class='form-control' placeholder='Creacion del Caso' disabled></th>
+                                <th><input type='text' class='form-control' placeholder='Fecha Envio' disabled></th>
+                                <th><input type='text' class='form-control' placeholder='Pregunta' disabled></th>
+                                <th><input type='text' class='form-control' placeholder='Categoria' disabled></th>
+                                <th><input type='text' class='form-control' placeholder='Estado de la Pregunta' disabled></th>
+                                <th><input type='text' class='form-control' placeholder='' disabled></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <?php
+                            require_once '../../controlador/PreguntasController.php';
+                            ?>
+                        </tbody>
+                    </table>
+                </form>
+
 
             </div>
         </div>

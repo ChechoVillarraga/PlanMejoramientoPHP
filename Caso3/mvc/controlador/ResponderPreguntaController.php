@@ -7,7 +7,7 @@ if (isset($_POST["responder"]) || (isset($_POST["reenviar"]))) {
         $idEstado = "3";
     }
     
-    $id=$_GET['caso'];
+    $id=$_POST['responder'];
    
     $pregunta = $_POST["respuesta"];
     

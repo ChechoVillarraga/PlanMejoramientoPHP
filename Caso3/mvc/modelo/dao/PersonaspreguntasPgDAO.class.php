@@ -19,6 +19,7 @@ class PersonaspreguntasPgDAO implements PersonaspreguntasDAO {
     }
 
     public function queryPreguntasPorCaso($caso) {
+        echo $caso;
         $allPreguntas = array();
         $sql = 'SELECT preguntasrespuestas_idpreguntas,fechaenvio,casos_idcasos,preguntasrespuestas_idpreguntas '
                 . 'FROM personaspreguntas '
