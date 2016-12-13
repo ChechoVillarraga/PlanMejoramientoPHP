@@ -4,7 +4,6 @@ require_once '../../modelo/include_dao.php';
 $objPregunta = new PersonaspreguntasPgDAO();
 
 $c = $objPregunta->queryPreguntasPorCaso($_GET['caso']);
-$h = $_GET['per'];
 
 //echo $_SESSION['idPersonas'];
 //print_r($c);

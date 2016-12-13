@@ -50,7 +50,30 @@ class PreguntasrespuestasPgDAO implements PreguntasrespuestasDAO {
         return $arrayExit;
     }
 
-    public function queryPreguntaCategoria($id) {
+    public function queryEmpleadoPregunta($caso) {
+        $arrayExit = array();
+        $sql = 'SELECT * '
+                . 'From personaspreguntas p  '
+                . 'inner join personas pe '
+                . 'on p.personas_idpersonas=pe.idpersonas '
+                . 'inner join preguntasrespuestas pr '
+                . 'on p.preguntasrespuestas_idpreguntas=pr.idpreguntas '
+                . 'where p.casos_idcasos = ' . $caso.' and pe.roles_idroles=1';
+//        print_r($sql);
+        try {
+            $query = $this->conexion->prepare($sql);
+            if ($query->execute()) {
+                $arrayExit = $query->fetchALL(PDO::FETCH_ASSOC);
+            } else {
+                $this->outputMessage = 'Error in the sql expression';
+            }
+        } catch (PDOException $e) {
+            $this->outputMessage = "error in the connection : " . $e->getMessage();
+        }
+        return $arrayExit;
+    }
+    
+        public function queryPreguntaCategoria($id) {
 //        $allCatego = array();
         $sql = 'SELECT c.categoria,e.estado,p.preguntas,c.idcategoriapregunta From preguntasrespuestas p  inner join categoriapregunta c on p.categoriapregunta_idcategoriapregunta=c.idcategoriapregunta inner join estados e on p.estados_idestados = e.idestados where p.idpreguntas = ' . $id;
         try {

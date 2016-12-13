@@ -59,9 +59,9 @@ class PersonasPgDAO implements PersonasDAO {
         }
         return $arrayExit;
     }
-    
+
     public function queryAllByCoorArea() {
-        $sql = 'SELECT * FROM personas inner join area on area.idarea=personas.area_idarea where roles_idroles=2 and area_idarea='.$_SESSION["roles_idroles"];
+        $sql = 'SELECT * FROM personas inner join area on area.idarea=personas.area_idarea where roles_idroles=2 and area_idarea=' . $_SESSION["roles_idroles"];
         try {
             $query = $this->conexion->prepare($sql);
             if ($query->execute()) {
@@ -122,6 +122,28 @@ class PersonasPgDAO implements PersonasDAO {
      */
     public function queryAll() {
         $sql = 'select idpersonas,nombres,apellidos,correo,rol,area from personas p inner join roles r on p.roles_idroles=r.idroles inner join area a on p.area_idarea=a.idarea';
+        try {
+            $query = $this->conexion->prepare($sql);
+            if ($query->execute()) {
+                $arrayExit = $query->fetchALL(PDO::FETCH_ASSOC);
+            } else {
+                $this->outputMessage = 'Error in the sql expression';
+            }
+        } catch (PDOException $e) {
+            $this->outputMessage = "error in the connection : " . $e->getMessage();
+        }
+        return $arrayExit;
+    }
+
+    public function queryById($valor) {
+        $sql = 'select idpersonas,nombres,apellidos,correo,rol,area '
+                . 'from personas p '
+                . 'inner join roles r '
+                . 'on p.roles_idroles=r.idroles '
+                . 'inner join area a '
+                . 'on p.area_idarea=a.idarea '
+                . 'where p.idpersonas='.$valor;
+        print_r($sql);
         try {
             $query = $this->conexion->prepare($sql);
             if ($query->execute()) {
