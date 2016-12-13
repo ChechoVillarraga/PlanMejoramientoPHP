@@ -22,11 +22,16 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 2 || $_SESS
         }
     </style>
     <DIV class="container-fluid">
-        <?php
-        if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 3) {
-            echo '<a href="../crear/enviarPregunta.php" align="center" class="btn btn-primary">¿Deseas enviar una pregunta?!</a>';
-        }
-        ?>
+                <?php
+                if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
+                    echo '<button type="button"'
+                    . 'onClick="location.href='
+                    . "'../crear/ReenviaArCoordinador.php?"
+                    . "caso="
+                    . $_GET["caso"] . "'"
+                    . '">Reenviar a Coordinador</button>';
+                }
+                ?>
         <div class="row">
             <div class="panel panel-primary filterable">
                 <div class="panel-heading">
@@ -42,7 +47,11 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 2 || $_SESS
                             <th><input type="text" class="form-control" placeholder="Fecha Envio" disabled></th>
                             <th><input type="text" class="form-control" placeholder="Pregunta" disabled></th>
                             <th><input type="text" class="form-control" placeholder="Categoria" disabled></th>
-                            <th><input type="text" class="form-control" placeholder="Estado de la Pregunta" disabled></th>
+                            <?php
+                            if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
+                                echo '<th><input type="text" class="form-control" placeholder="Estado de la Pregunta" disabled></th>';
+                            }
+                            ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -61,7 +70,7 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 2 || $_SESS
             <fieldset>
 
                 <!-- Form Name -->
-                <legend class=" legenda">Responde preguntas o reenvialas!</legend>
+                <legend class=" legenda">Responde aqui la pregunta anterior!</legend>
 
 
 
@@ -71,9 +80,7 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 2 || $_SESS
                     <div class="col-md-4">                     
                         <textarea class="form-control" id="respuesta" name="respuesta" required=""></textarea>
                     </div>
-                    <div class="col-md-4">
-                        <button id="cancelar" name="cancelar" class="btn btn-default">Reenviar a Coordinador</button>
-                    </div>
+
                 </div>
 
                 <!-- Button (Double) -->
@@ -102,4 +109,4 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 2 || $_SESS
 } else {
 
     header("Location: ../index.php");
-}
+}    

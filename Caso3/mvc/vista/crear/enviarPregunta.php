@@ -21,6 +21,20 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 2 || $_SESS
 
                 <!-- Form Name -->
                 <legend>Enviale una pregunta al Coordinador!</legend>
+
+                <!-- Button Drop Down -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="coordinador">Selecciona un Coordinador:</label>
+                    <div class="col-md-4">
+                        <select class="form-control" id="coordinador" name="coor">
+                            <option value="">Selecciona...</option>
+                            <?php
+                            require_once '../../controlador/DropDownCoorAreaController.php';
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
                 <!-- Textarea -->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="pregunta">Pregunta:</label>
@@ -44,16 +58,16 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 2 || $_SESS
 
 
                 <!-- Select Multiple -->
-<!--                <div class="form-group">
-                    <label class="col-md-4 control-label" for="tags">Tags de preguntas:</label>
-                    <div class="col-md-4">
-                        <select id="tags" name="tags" class="form-control" multiple="multiple" style="height: 200px;">
-                            <?php
+                <!--                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="tags">Tags de preguntas:</label>
+                                    <div class="col-md-4">
+                                        <select id="tags" name="tags" class="form-control" multiple="multiple" style="height: 200px;">
+                <?php
 //                            require_once '../../controlador/selectMultipleCategoriasController.php';
-                            ?>
-                        </select>
-                    </div>
-                </div>-->
+                ?>
+                                        </select>
+                                    </div>
+                                </div>-->
 
                 <!-- Button (Double) -->
                 <div class="form-group">

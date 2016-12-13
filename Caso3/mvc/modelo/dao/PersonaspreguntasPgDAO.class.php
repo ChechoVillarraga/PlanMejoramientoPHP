@@ -107,7 +107,13 @@ class PersonaspreguntasPgDAO implements PersonaspreguntasDAO {
 
     public function queryPreguntas() {
         $allPreguntas = array();
-        $sql = 'SELECT MIN(preguntasrespuestas_idpreguntas),fechaenvio,casos_idcasos,preguntasrespuestas_idpreguntas,cp.area_idarea FROM personaspreguntas pp inner join preguntasrespuestas pr on pr.idpreguntas = pp.preguntasrespuestas_idpreguntas inner join categoriapregunta cp on cp.idcategoriapregunta=pr.categoriapregunta_idcategoriapregunta WHERE cp.area_idarea=' . $_SESSION['area_idarea'] . ' group by casos_idcasos,fechaenvio,personas_idpersonas,preguntasrespuestas_idpreguntas,cp.area_idarea';
+        $sql = 'SELECT * FROM personaspreguntas pp inner join preguntasrespuestas pr on pr.idpreguntas = pp.preguntasrespuestas_idpreguntas inner join categoriapregunta cp on cp.idcategoriapregunta=pr.categoriapregunta_idcategoriapregunta WHERE pp.personas_idpersonas=' . $_SESSION['idPersonas'];
+        if ($_SESSION['roles_idroles'] == 1) {
+            $sql .= ' and pr.estados_idestados=4';
+        } else if ($_SESSION['roles_idroles'] == 2) {
+            $sql .= ' and (pr.estados_idestados=3 OR pr.estados_idestados=6)';
+        }
+        echo $sql;
         try {
             $query = $this->conexion->prepare($sql);
             if ($query->execute()) {
@@ -152,15 +158,14 @@ class PersonaspreguntasPgDAO implements PersonaspreguntasDAO {
      *
      * @param PersonaspreguntasMySql personaspregunta
      */
-    public function insert($idCasos, $idPregun) {
+    public function insert($idCasos, $idPregun, $per) {
         $respuesta = null;
         $idpersonas = null;
         $sql = 'INSERT INTO personaspreguntas (fechaEnvio, Personas_idPersonas, Casos_idCasos, PreguntasRespuestas_idPreguntas) VALUES (?, ?, ?, ?)';
         try {
             $ahora = date("Y-m-d");
-            $idC = $idCasos[0]['max'];
+            $idC = $idCasos;
             $idPre = $idPregun[0]['max'];
-            $per = $_SESSION['idPersonas'];
             $query = $this->conexion->prepare($sql);
             $query->bindParam(1, $ahora);
             $query->bindParam(2, $per);

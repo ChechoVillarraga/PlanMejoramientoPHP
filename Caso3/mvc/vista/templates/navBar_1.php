@@ -40,7 +40,7 @@ and open the template in the editor.
                                 <ul id="login-dp" class="dropdown-menu">
                                     <?php
                                     if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 3) {
-                                    echo'<li><a href="../crear/enviarPregunta.php">Registrar Pregunta</a></li>';
+                                        echo'<li><a href="../crear/enviarPregunta.php">Registrar Pregunta</a></li>';
                                     }
                                     ?>
                                     <li><a href="../consultar/consultarPreguntas.php">Consultar Respuestas</a></li>
@@ -63,17 +63,31 @@ and open the template in the editor.
                                     <li><a href="../consultar/consultarCategorias.php">Consultar Categorias</a></li>
                                 </ul>
                             </li>
-                                    <?php
-                                    if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
-                            echo '<li class="dropdown">
+                            <?php
+                            if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
+                                echo '<li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>¿ Empleados ?</b> <span class="caret"></span></a>
                                 <ul id="login-dp" class="dropdown-menu">
                                         <li><a href="../crear/crearEmpleado.php">Registrar nuevo Empleado</a></li>
                                     <li><a href="../consultar/consultarEmpleados.php">Consultar Empleados</a></li>
                                 </ul>
                             </li>';
-                                    }
+                            }
+                            ?>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>¿ Datos de Sesión ?</b> <span class="caret"></span></a>
+                                <ul id="login-dp" class="dropdown-menu">
+                                    <?php
+                                    echo '<li>Cedula: '.$_SESSION["idPersonas"].'</li>';
+                                    echo '<li>Nombres: '.$_SESSION["nombres"].'</li>';
+                                    echo '<li>Apellidos: '.$_SESSION["apellidos"].'</li>';
+                                    echo '<li>Correo: '.$_SESSION["correo"].'</li>';
+                                    echo '<li>Clave: '.$_SESSION["clave"].'</li>';
+                                    echo '<li>Rol: '.$_SESSION["roles_idroles"].'</li>';
+                                    echo '<li>Area: '.$_SESSION["area_idarea"].'</li>';
                                     ?>
+                                </ul>
+                            </li>
                         </ul>
                         <?php
                         if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
@@ -84,7 +98,7 @@ and open the template in the editor.
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="../../controlador/LogoutController.php">Cerrar Sesión</a></li>
                     </ul>
-                    
+
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>

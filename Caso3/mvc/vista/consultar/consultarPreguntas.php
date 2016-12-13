@@ -23,7 +23,7 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 3 || $_SESS
             echo '<a href="../crear/enviarPregunta.php" align="center" class="btn btn-primary">¿Deseas enviar una pregunta?!</a>';
         }
         ?>
-        <div class="row">
+
             <div class="panel panel-primary filterable">
                 <div class="panel-heading">
                     <h3 class="panel-title">Preguntas realizadas por Empleados</h3>

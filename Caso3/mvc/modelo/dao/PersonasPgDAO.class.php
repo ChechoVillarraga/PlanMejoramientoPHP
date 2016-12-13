@@ -14,6 +14,21 @@ class PersonasPgDAO implements PersonasDAO {
         $this->conexion = DbConnection::singletonConexion();
     }
 
+    public function queryAllAreaRol() {
+        $sql = 'SELECT * FROM personas where roles_idroles=2 and area_idarea=1';
+        try {
+            $query = $this->conexion->prepare($sql);
+            if ($query->execute()) {
+                $arrayExit = $query->fetchALL(PDO::FETCH_ASSOC);
+            } else {
+                $this->outputMessage = 'Error in the sql expression';
+            }
+        } catch (PDOException $e) {
+            $this->outputMessage = "error in the connection : " . $e->getMessage();
+        }
+        return $arrayExit;
+    }
+
     public function queryInforme() {
         $allCatego = array();
         $sql = 'select x.casos_idcasos,p.preguntas,cp.categoria,a.area,c.fechacreacion from personaspreguntas x inner join casos c on c.idcasos=x.casos_idcasos inner join preguntasrespuestas p on p.idpreguntas=x.preguntasrespuestas_idpreguntas inner join categoriapregunta cp on cp.idcategoriapregunta=p.categoriapregunta_idcategoriapregunta inner join area a on a.idarea = cp.area_idarea inner join personas pe on pe.idpersonas=x.personas_idpersonas inner join roles r on r.idroles=pe.roles_idroles where pe.roles_idroles=1 group by x.casos_idcasos,p.preguntas,cp.categoria,a.area,c.fechacreacion';
@@ -29,37 +44,50 @@ class PersonasPgDAO implements PersonasDAO {
         }
         return $arrayExit;
     }
-    
-      public function queryAllByCoordinadores() {
+
+    public function queryAllByCoordinadores() {
         $sql = 'SELECT * FROM personas inner join area on area.idarea=personas.area_idarea where roles_idroles=2';
         try {
             $query = $this->conexion->prepare($sql);
             if ($query->execute()) {
                 $arrayExit = $query->fetchALL(PDO::FETCH_ASSOC);
-                
             } else {
                 $this->outputMessage = 'Error in the sql expression';
             }
         } catch (PDOException $e) {
             $this->outputMessage = "error in the connection : " . $e->getMessage();
         }
-            return $arrayExit;
+        return $arrayExit;
     }
     
-    public function queryAllMisEmpleados() {
-        $sql = 'SELECT * FROM personas inner join area on area.idarea=personas.area_idarea where roles_idroles=1 and area_idarea='.$_SESSION["area_idarea"];
+    public function queryAllByCoorArea() {
+        $sql = 'SELECT * FROM personas inner join area on area.idarea=personas.area_idarea where roles_idroles=2 and area_idarea='.$_SESSION["roles_idroles"];
         try {
             $query = $this->conexion->prepare($sql);
             if ($query->execute()) {
                 $arrayExit = $query->fetchALL(PDO::FETCH_ASSOC);
-                
             } else {
                 $this->outputMessage = 'Error in the sql expression';
             }
         } catch (PDOException $e) {
             $this->outputMessage = "error in the connection : " . $e->getMessage();
         }
-            return $arrayExit;
+        return $arrayExit;
+    }
+
+    public function queryAllMisEmpleados() {
+        $sql = 'SELECT * FROM personas inner join area on area.idarea=personas.area_idarea where roles_idroles=1 and area_idarea=' . $_SESSION["area_idarea"];
+        try {
+            $query = $this->conexion->prepare($sql);
+            if ($query->execute()) {
+                $arrayExit = $query->fetchALL(PDO::FETCH_ASSOC);
+            } else {
+                $this->outputMessage = 'Error in the sql expression';
+            }
+        } catch (PDOException $e) {
+            $this->outputMessage = "error in the connection : " . $e->getMessage();
+        }
+        return $arrayExit;
     }
 
     private function traerOtrosCampos($arrayExit) {
@@ -75,7 +103,7 @@ class PersonasPgDAO implements PersonasDAO {
         }
         return $arrayExit;
     }
-    
+
     /**
      * Get Domain object by primry key
      *
@@ -104,7 +132,7 @@ class PersonasPgDAO implements PersonasDAO {
         } catch (PDOException $e) {
             $this->outputMessage = "error in the connection : " . $e->getMessage();
         }
-            return $arrayExit;
+        return $arrayExit;
     }
 
     /**
@@ -138,20 +166,20 @@ class PersonasPgDAO implements PersonasDAO {
         $aprobado;
         $sql = 'INSERT INTO personas (nombres, apellidos, correo, clave, Roles_idRoles, Area_idArea) VALUES (?, ?, ?, ?, ?, ?, ?)';
         try {
-        $query = $this->conexion->prepare($sql);
-        $query->bindParam(1, $persona->getIdPersonas());
-        $query->bindParam(2, $persona->getNombres());
-        $query->bindParam(3, $persona->getApellidos());
-        $query->bindParam(4, $persona->getCorreo());
-        $query->bindParam(5, $persona->getClave());
-        $query->bindParam(6, $persona->getRolesIdRoles());
-        $query->bindParam(7, $persona->getAreaIdArea());
+            $query = $this->conexion->prepare($sql);
+            $query->bindParam(1, $persona->getIdPersonas());
+            $query->bindParam(2, $persona->getNombres());
+            $query->bindParam(3, $persona->getApellidos());
+            $query->bindParam(4, $persona->getCorreo());
+            $query->bindParam(5, $persona->getClave());
+            $query->bindParam(6, $persona->getRolesIdRoles());
+            $query->bindParam(7, $persona->getAreaIdArea());
 
-        if ($query->execute()) {
-            $aprobado=true;
-        } else {
-            $aprobado=false;
-        }
+            if ($query->execute()) {
+                $aprobado = true;
+            } else {
+                $aprobado = false;
+            }
         } catch (PDOException $e) {
             $this->outputMessage = 'error en conexion' . $e->getMessage();
         }

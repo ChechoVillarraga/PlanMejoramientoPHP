@@ -1,5 +1,5 @@
 <?php
-if ((!isset($_SESSION))||(!session_id())) {
+if ((!isset($_SESSION)) || (!session_id())) {
     session_start();
 }
 
@@ -18,13 +18,14 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 2 || $_SESS
             background-color: #337ab7;
             color: inherit;
         }
+        .legenda{
+            background-color: #337ab7;
+            color: white;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+        }
     </style>
     <DIV class="container-fluid">
-                <?php
-        if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 3) {
-        echo '<a href="../crear/enviarPregunta.php" align="center" class="btn btn-primary">¿Deseas enviar una pregunta?!</a>';
-         }
-        ?>
         <div class="row">
             <div class="panel panel-primary filterable">
                 <div class="panel-heading">
@@ -53,67 +54,57 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 2 || $_SESS
         </div>
 
         <?php
-if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
-        require_once '../../controlador/creadorFormController.php';
-        ?>
-        <fieldset>
+        if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
+            require_once '../../controlador/ReenviadorFormController.php';
+            ?>
+            <fieldset>
 
-            <!-- Form Name -->
-            <legend>Responde preguntas o reenvialas!</legend>
+                <!-- Form Name -->
+                <legend class=" legenda">Reenvia a un Coordinador de otra area!</legend>
 
-            <!-- Button Drop Down -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="coordinador">Enviar a:</label>
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <input id="coordinador" name="coordinador" class="form-control" placeholder="selecciona..." type="text" >
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-
-                                <span class="caret"></span>
-
-                            </button>
-                            <ul class="dropdown-menu pull-right">
-                                <?php
-                                require_once '../../controlador/dropDownPersonasController.php';
-                                ?>
-                            </ul>
-                        </div>
+                <!-- Button Drop Down -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="coordinador">Selecciona un Coordinador:</label>
+                    <div class="col-md-4">
+                        <select class="form-control" id="coordinador" name="coor">
+                            <option value="">Selecciona...</option>
+                            <?php
+                            require_once '../../controlador/dropDownPersonasController.php';
+                            ?>
+                        </select>
                     </div>
                 </div>
-            </div>
 
-            <!-- Textarea -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="respuesta">Respuesta:</label>
-                <div class="col-md-4">                     
-                    <textarea class="form-control" id="respuesta" name="respuesta" required=""></textarea>
+                <!-- Textarea -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="respuesta">Respuesta:</label>
+                    <div class="col-md-4">                     
+                        <textarea class="form-control" id="respuesta" name="respuesta" required=""></textarea>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Button (Double) -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="enviar"></label>
-                <div class="col-md-8">
-                    <button id="responder" name="responder" class="btn btn-success">Reenviar</button>
-                    <button id="cancelar" name="cancelar" class="btn btn-danger">Limpiar</button>
+                <!-- Button (Double) -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="enviar"></label>
+                    <div class="col-md-8">
+                        <button id="responder" name="responder" class="btn btn-success">Reenviar</button>
+                        <button id="cancelar" name="cancelar" class="btn btn-danger">Limpiar</button>
+                    </div>
                 </div>
-            </div>
 
-        </fieldset>
-    </form>
+            </fieldset>
+        </form>
 
 
-    </DIV>
-
+        </DIV>
 
 
 
-    <?php
-}
+
+        <?php
+    }
     include_once '../templates/bootom.php';
-//        } 
 } else {
 
     header("Location: ../index.php");
-}
+}    

@@ -18,7 +18,7 @@ interface PersonaspreguntasDAO {
 
     public function queryPreguntas();
 
-    public function insert($hey, $id);
+    public function insert($idCasos, $idPregun, $per);
 
     /**
      * Get Domain object by primry key

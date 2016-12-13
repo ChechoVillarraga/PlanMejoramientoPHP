@@ -4,7 +4,7 @@ require_once '../../modelo/include_dao.php';
 $c = array();
 $obj = new PersonasPgDAO;
 
-$c = $obj->queryAllByCoordinadores();
+$c = $obj->queryAllByCoorArea();
 
 //        print_r($c);
 foreach ($c as $campos) {

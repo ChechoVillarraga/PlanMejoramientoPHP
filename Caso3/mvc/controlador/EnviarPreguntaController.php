@@ -16,11 +16,16 @@ if (isset($_POST["enviar"])) {
     $respuestaCaso = $objCaso->insert(); //Creando un caso para ligarlo a la pregunta
 
     $idCasos = $objCaso->ultimoId(); //CALVE PRIMARIA DE LOS CASOS
+    print_r($idCasos);
     $idP = $obj->idPreguntas(); //llave primaria de la ultima pregunta que se creo;
+    
+    $per = $_POST['coor'];
+    $respuestaDos = $objPP->insert($idCasos[0]['max'], $idP, $per);
+    
+    $per = $_SESSION['idPersonas'];
+    $respuestaTres = $objPP->insert($idCasos[0]['max'], $idP, $per);
 
-    $respuestaDos = $objPP->insert($idCasos, $idP);
-
-    if ($respuesta == 1 && $respuestaCaso == 1 && $respuestaDos == 1) {
+    if ($respuesta == 1 && $respuestaCaso == 1 && $respuestaDos == 1 && $respuestaTres == 1) {
         echo "<script>alert('Enviado correctamente!')</script>";
         echo '<meta http-equiv="Refresh" content="0;URL=../vista/crear/enviarPregunta.php">';
     } else {

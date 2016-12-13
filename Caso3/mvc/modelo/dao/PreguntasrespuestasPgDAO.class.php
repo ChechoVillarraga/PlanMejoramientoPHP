@@ -140,7 +140,7 @@ class PreguntasrespuestasPgDAO implements PreguntasrespuestasDAO {
      *
      * @param PreguntasrespuestasMySql preguntasrespuesta
      */
-    public function insert($pregunta, $idEstado, $id) {
+    public function insert($pregunta, $idEstado, $idCasos, $per) {
 
         $sql = 'INSERT INTO preguntasrespuestas (preguntas, estados_idestados, categoriapregunta_idcategoriapregunta) VALUES (?,?,?)';
         $p = new PersonaspreguntasPgDAO();
@@ -154,7 +154,7 @@ class PreguntasrespuestasPgDAO implements PreguntasrespuestasDAO {
             if ($query->execute()) {
                 $objPersonasPreguntas = new PersonaspreguntasPgDAO();
                 $obj = $this->idPreguntas();
-                $respuesta = $objPersonasPreguntas->insert($id,$obj);
+                $respuesta = $objPersonasPreguntas->insert($idCasos, $obj, $per);
             } else {
                 $respuesta = 3;
             }
