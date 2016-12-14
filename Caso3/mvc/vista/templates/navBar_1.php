@@ -88,12 +88,12 @@ and open the template in the editor.
                                     ?>
                                 </ul>
                             </li>
-                        </ul>
                         <?php
                         if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
                             echo '<li><a href="../pdf/PdfFinal.php">Generar Reporte Pdf</a></li>';
                         }
                         ?>
+                        </ul>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="../../controlador/LogoutController.php">Cerrar Sesión</a></li>

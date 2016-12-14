@@ -17,14 +17,14 @@ if (isset($_POST["enviar"])) {
     $respuestaCaso = $objCaso->insert(); //Creando un caso para ligarlo a la pregunta
 
     $idCasos = $objCaso->ultimoId(); //CALVE PRIMARIA DE LOS CASOS
-    print_r($idCasos);
-    $idP = $obj->idPreguntas(); //llave primaria de la ultima pregunta que se creo;
+    $idP = $obj->queryMaxId(); //llave primaria de la ultima pregunta que se creo;
+    $idPregun = $idP[0]['max']; //solo se pasa el valor y no todo el arreglo.
 
     $per = $_POST['coor'];
-    $respuestaDos = $objPP->insert($idCasos[0]['max'], $idP, $per);
+    $respuestaDos = $objPP->insert($idCasos[0]['max'], $idPregun, $per);
 
     $per = $_SESSION['idPersonas'];
-    $respuestaTres = $objPP->insert($idCasos[0]['max'], $idP, $per);
+    $respuestaTres = $objPP->insert($idCasos[0]['max'], $idPregun, $per);
 
     $p = array();
     $objp = new PersonasPgDAO;

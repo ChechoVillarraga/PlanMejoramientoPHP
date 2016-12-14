@@ -22,16 +22,19 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 2 || $_SESS
         }
     </style>
     <DIV class="container-fluid">
-                <?php
-                if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
-                    echo '<button type="button"'
-                    . 'onClick="location.href='
-                    . "'../crear/ReenviaArCoordinador.php?"
-                    . "caso="
-                    . $_GET["caso"] . "'"
-                    . '">Reenviar a Coordinador</button>';
-                }
-                ?>
+        <?php
+        if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
+            echo '<button type="button"'
+            . 'onClick="location.href='
+            . "'../crear/ReenviaArCoordinador.php?"
+            . "caso="
+            . $_GET["caso"] . "&"
+            . "cat="
+            . $_GET["cat"] . "'"
+            . '" class="btn btn-warning">Reenviar a Coordinador</button>';
+        }
+        ?>
+        <a href="../consultar/consultarPreguntas.php" align="center" class="btn btn-warning">Volver!</a>
         <div class="row">
             <div class="panel panel-primary filterable">
                 <div class="panel-heading">

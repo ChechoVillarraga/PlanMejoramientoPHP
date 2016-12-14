@@ -35,7 +35,7 @@ class PreguntasrespuestasPgDAO implements PreguntasrespuestasDAO {
         return $respuesta;
     }
 
-    public function idPreguntas() {
+    public function queryMaxId() {
         $sql = 'SELECT max(idpreguntas) from preguntasrespuestas;';
         try {
             $query = $this->conexion->prepare($sql);
@@ -58,7 +58,7 @@ class PreguntasrespuestasPgDAO implements PreguntasrespuestasDAO {
                 . 'on p.personas_idpersonas=pe.idpersonas '
                 . 'inner join preguntasrespuestas pr '
                 . 'on p.preguntasrespuestas_idpreguntas=pr.idpreguntas '
-                . 'where p.casos_idcasos = ' . $caso.' and pe.roles_idroles=1';
+                . 'where p.casos_idcasos = ' . $caso . ' and pe.roles_idroles=1';
 //        print_r($sql);
         try {
             $query = $this->conexion->prepare($sql);
@@ -72,8 +72,31 @@ class PreguntasrespuestasPgDAO implements PreguntasrespuestasDAO {
         }
         return $arrayExit;
     }
-    
-        public function queryPreguntaCategoria($id) {
+
+    public function queryCoorPregunta($caso) {
+        $arrayExit = array();
+        $sql = 'SELECT * '
+                . 'From personaspreguntas p  '
+                . 'inner join personas pe '
+                . 'on p.personas_idpersonas=pe.idpersonas '
+                . 'inner join preguntasrespuestas pr '
+                . 'on p.preguntasrespuestas_idpreguntas=pr.idpreguntas '
+                . 'where p.casos_idcasos = ' . $caso . ' and pe.roles_idroles=2';
+//        print_r($sql);
+        try {
+            $query = $this->conexion->prepare($sql);
+            if ($query->execute()) {
+                $arrayExit = $query->fetchALL(PDO::FETCH_ASSOC);
+            } else {
+                $this->outputMessage = 'Error in the sql expression';
+            }
+        } catch (PDOException $e) {
+            $this->outputMessage = "error in the connection : " . $e->getMessage();
+        }
+        return $arrayExit;
+    }
+
+    public function queryPreguntaCategoria($id) {
 //        $allCatego = array();
         $sql = 'SELECT c.categoria,e.estado,p.preguntas,c.idcategoriapregunta From preguntasrespuestas p  inner join categoriapregunta c on p.categoriapregunta_idcategoriapregunta=c.idcategoriapregunta inner join estados e on p.estados_idestados = e.idestados where p.idpreguntas = ' . $id;
         try {
@@ -163,23 +186,17 @@ class PreguntasrespuestasPgDAO implements PreguntasrespuestasDAO {
      *
      * @param PreguntasrespuestasMySql preguntasrespuesta
      */
-    public function insert($pregunta, $idEstado, $idCasos, $per) {
-
+    public function insert($pregunta, $idEstado, $categoria) {
         $sql = 'INSERT INTO preguntasrespuestas (preguntas, estados_idestados, categoriapregunta_idcategoriapregunta) VALUES (?,?,?)';
-        $p = new PersonaspreguntasPgDAO();
         try {
-            $fastidio = "7";
             $query = $this->conexion->prepare($sql);
             $query->bindParam(1, $pregunta);
             $query->bindParam(2, $idEstado);
-            $query->bindParam(3, $fastidio);
-
+            $query->bindParam(3, $categoria);
             if ($query->execute()) {
-                $objPersonasPreguntas = new PersonaspreguntasPgDAO();
-                $obj = $this->idPreguntas();
-                $respuesta = $objPersonasPreguntas->insert($idCasos, $obj, $per);
+                $respuesta = true;
             } else {
-                $respuesta = 3;
+                $respuesta = false;
             }
         } catch (PDOException $e) {
             $this->outputMessage = 'error en conexion' . $e->getMessage();

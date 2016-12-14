@@ -10,9 +10,9 @@ interface PreguntasrespuestasDAO {
 
     public function enviarPregunta($pregunta, $idEstado, $categoria);
 
-    public function idPreguntas();
-
     public function queryPreguntaCategoria($id);
+    
+    public function queryMaxId();
 
     /**
      * Get Domain object by primry key
@@ -44,7 +44,7 @@ interface PreguntasrespuestasDAO {
      *
      * @param Preguntasrespuestas preguntasrespuesta
      */
-    public function insert($pregunta, $idEstado, $id, $per);
+    public function insert($pregunta, $idEstado, $categoria);
 
     /**
      * Update record in table

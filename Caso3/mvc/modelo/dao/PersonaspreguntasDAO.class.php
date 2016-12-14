@@ -16,7 +16,7 @@ interface PersonaspreguntasDAO {
 
     public function queryPreguntaMinimo();
 
-    public function queryPreguntas();
+public function queryPreguntas($estado1, $estado2);
 
     public function insert($idCasos, $idPregun, $per);
 

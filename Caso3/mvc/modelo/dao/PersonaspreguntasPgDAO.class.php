@@ -18,13 +18,33 @@ class PersonaspreguntasPgDAO implements PersonaspreguntasDAO {
         $this->conexion = DbConnection::singletonConexion();
     }
 
-    public function queryPreguntasPorCaso($caso) {
+    public function queryOtroParticipante($caso, $idPregunta) {
+        $sql = 'select * '
+                . 'from personaspreguntas pp '
+                . 'inner join personas p '
+                . 'on pp.personas_idpersonas=p.idpersonas '
+                . 'where pp.casos_idcasos = ' . $caso . ' and p.roles_idroles=1';
+//        print_r($sql);
+        try {
+            $query = $this->conexion->prepare($sql);
+            if ($query->execute()) {
+                $arrayExit = $query->fetchALL(PDO::FETCH_ASSOC);
+            } else {
+                $this->outputMessage = 'Error in the sql expression';
+            }
+        } catch (PDOException $e) {
+            $this->outputMessage = "error in the connection : " . $e->getMessage();
+        }
+        return $arrayExit;
+    }
+
+    public function queryPreguntasPorCaso($caso) {//Usada en la tabla de ResponderPregunta y en ReenviarACoordinador
         $allPreguntas = array();
         $sql = 'SELECT preguntasrespuestas_idpreguntas,fechaenvio,casos_idcasos,preguntasrespuestas_idpreguntas '
                 . 'FROM personaspreguntas '
                 . 'inner join personas '
                 . 'on personas.idpersonas=personaspreguntas.personas_idpersonas '
-                . 'WHERE casos_idcasos=' . $caso.' AND personas.idpersonas='.$_SESSION['idPersonas'];
+                . 'WHERE casos_idcasos=' . $caso.' order by preguntasrespuestas_idpreguntas';
 //        print_r($sql);
         try {
             $query = $this->conexion->prepare($sql);
@@ -107,15 +127,11 @@ class PersonaspreguntasPgDAO implements PersonaspreguntasDAO {
         return $allPreguntas;
     }
 
-    public function queryPreguntas() {
+    public function queryPreguntas($estado1, $estado2) {//Usada en consultarPreguntas
         $allPreguntas = array();
         $sql = 'SELECT * FROM personaspreguntas pp inner join preguntasrespuestas pr on pr.idpreguntas = pp.preguntasrespuestas_idpreguntas inner join categoriapregunta cp on cp.idcategoriapregunta=pr.categoriapregunta_idcategoriapregunta WHERE pp.personas_idpersonas=' . $_SESSION['idPersonas'];
-        if ($_SESSION['roles_idroles'] == 1) {
-            $sql .= ' and pr.estados_idestados=4';
-        } else if ($_SESSION['roles_idroles'] == 2) {
-            $sql .= ' and (pr.estados_idestados=3 OR pr.estados_idestados=6)';
-        }
-        echo $sql;
+        $sql .= ' and (pr.estados_idestados=' . $estado1 . ' OR pr.estados_idestados=' . $estado2 . ')';
+//        print_r($sql);
         try {
             $query = $this->conexion->prepare($sql);
             if ($query->execute()) {
@@ -161,23 +177,19 @@ class PersonaspreguntasPgDAO implements PersonaspreguntasDAO {
      * @param PersonaspreguntasMySql personaspregunta
      */
     public function insert($idCasos, $idPregun, $per) {
-        $respuesta = null;
-        $idpersonas = null;
         $sql = 'INSERT INTO personaspreguntas (fechaEnvio, Personas_idPersonas, Casos_idCasos, PreguntasRespuestas_idPreguntas) VALUES (?, ?, ?, ?)';
         try {
             $ahora = date("Y-m-d");
-            $idC = $idCasos;
-            $idPre = $idPregun[0]['max'];
             $query = $this->conexion->prepare($sql);
             $query->bindParam(1, $ahora);
             $query->bindParam(2, $per);
-            $query->bindParam(3, $idC);
-            $query->bindParam(4, $idPre);
+            $query->bindParam(3, $idCasos);
+            $query->bindParam(4, $idPregun);
 
             if ($query->execute()) {
-                $respuesta = 1;
+                $respuesta = true;
             } else {
-                $respuesta = 0;
+                $respuesta = false;
             }
         } catch (PDOException $e) {
             $this->outputMessage = 'error en conexion' . $e->getMessage();
