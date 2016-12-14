@@ -90,7 +90,7 @@ and open the template in the editor.
                             </li>
                         <?php
                         if ($_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
-                            echo '<li><a href="../pdf/PdfFinal.php">Generar Reporte Pdf</a></li>';
+                            echo '<li><a href="../pdf/CircularPDF.php">Generar Reporte Pdf</a></li>';
                         }
                         ?>
                         </ul>

@@ -4,7 +4,7 @@ if (!isset($_SESSION)) {
 }
 
 if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 2 || $_SESSION['roles_idroles'] == 3) {
-    $title = 'Bienvenido!';
+    $title = 'Envio de Circular!';
 
     include_once '../templates/navBar_1.php';
     ?>
@@ -16,17 +16,30 @@ if ($_SESSION['roles_idroles'] == 1 || $_SESSION['roles_idroles'] == 2 || $_SESS
         }
     </style>
     <div class="container">
-        <DIV class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-            <?php
-            if ($_SESSION['roles_idroles'] == 1) {
-                echo '<IMG src="../images/inicioEmpleado.png" alt="Imagen el Pregunton"  class="center-block imagenFondo"/>';
-            } else if ($_SESSION['roles_idroles'] == 2) {
-                echo '<IMG src="../images/coordinador.png" alt="Imagen el Pregunton"  class="center-block imagenFondo"/>';
-            } else if ($_SESSION['roles_idroles'] == 2) {
-                echo '<IMG src="../images/administrador.png" alt="Imagen el Pregunton"  class="center-block imagenFondo"/>';
-            }
-            ?>
-        </DIV>
+
+        <h2 style="color: #FFFFFF">Envio de Circulares a todos los colaboradores!</h2>
+        <div class="container" >
+
+            <form method=GET target="_blank" action="../../controlador/CtlPdf.php">
+             <button id="responder" name="responder" class="btn btn-success">Generar Reporte</button>
+
+            </form>
+            <div style="background-color: rgba(255,255,266,0.8); padding: 30px; padding-bottom: 10px; border-radius: 10px;margin: 30px; height: 450px; width: 450px;">
+                <form action="../../controlador/GeneracionCircular.php" method="post">
+                    <label>Asunto:</label>
+                    <input name="asunto" type="text" id="asunto" class="form-control" required>
+                    <label>Archivo adjunto:</label>
+                    <input type="file" name="adjunto" class="form-control">
+                    <label>Mensaje:</label>
+                    <textarea name="mensaje" cols="50" rows="4" id="mensaje" class="form-control" required></textarea>
+                    <br/>
+
+                    <button class="btn btn-success">Enviar correo</button>
+                    <input type="hidden" name="phpmailer" class="form-control">
+                </form>
+            </div>
+        </div>
+
     </div>
     <?php
     include_once '../templates/bootom.php';

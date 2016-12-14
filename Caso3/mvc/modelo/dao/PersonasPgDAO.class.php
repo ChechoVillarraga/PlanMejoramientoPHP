@@ -6,7 +6,6 @@
  * @author: http://phpdao.com
  * @date: 2016-12-06 20:53
  */
-require_once './PersonasDAO.class.php';
 class PersonasPgDAO implements PersonasDAO {
 
     private $conexion = null;
@@ -32,7 +31,23 @@ class PersonasPgDAO implements PersonasDAO {
 
     public function queryInforme() {
         $allCatego = array();
-        $sql = 'select x.casos_idcasos,p.preguntas,cp.categoria,a.area,c.fechacreacion from personaspreguntas x inner join casos c on c.idcasos=x.casos_idcasos inner join preguntasrespuestas p on p.idpreguntas=x.preguntasrespuestas_idpreguntas inner join categoriapregunta cp on cp.idcategoriapregunta=p.categoriapregunta_idcategoriapregunta inner join area a on a.idarea = cp.area_idarea inner join personas pe on pe.idpersonas=x.personas_idpersonas inner join roles r on r.idroles=pe.roles_idroles where pe.roles_idroles=1 group by x.casos_idcasos,p.preguntas,cp.categoria,a.area,c.fechacreacion';
+        $sql = 'select Categoria,area,casos_idcasos,fechacreacion,preguntas
+from personaspreguntas x 
+inner join casos c 
+on c.idcasos=x.casos_idcasos 
+inner join preguntasrespuestas p 
+on p.idpreguntas=x.preguntasrespuestas_idpreguntas 
+inner join categoriapregunta cp 
+on cp.idcategoriapregunta=p.categoriapregunta_idcategoriapregunta 
+inner join area a 
+on a.idarea = cp.area_idarea 
+inner join personas pe 
+on pe.idpersonas=x.personas_idpersonas 
+inner join roles r 
+on r.idroles=pe.roles_idroles 
+where pe.roles_idroles=1 
+group by categoriapregunta_idcategoriapregunta,cp.categoria,a.area,x.casos_idcasos,c.fechacreacion,p.preguntas
+order by categoria;';
         try {
             $query = $this->conexion->prepare($sql);
             if ($query->execute()) {
@@ -122,7 +137,7 @@ class PersonasPgDAO implements PersonasDAO {
      * Get all records from table
      */
     public function queryAll() {
-        $sql = 'select idpersonas,nombres,apellidos,correo,rol,area from personas p inner join roles r on p.roles_idroles=r.idroles inner join area a on p.area_idarea=a.idarea';
+        $sql = 'select * from personas p inner join roles r on p.roles_idroles=r.idroles inner join area a on p.area_idarea=a.idarea';
         try {
             $query = $this->conexion->prepare($sql);
             if ($query->execute()) {
