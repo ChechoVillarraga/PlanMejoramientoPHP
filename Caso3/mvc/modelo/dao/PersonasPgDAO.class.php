@@ -6,6 +6,7 @@
  * @author: http://phpdao.com
  * @date: 2016-12-06 20:53
  */
+require_once './PersonasDAO.class.php';
 class PersonasPgDAO implements PersonasDAO {
 
     private $conexion = null;
